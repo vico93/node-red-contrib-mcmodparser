@@ -1,2 +1,6 @@
+# Coisinhas do NodeJS
 node_modules/
-.opencode.json
+
+# Tokens/secrets
+/.opencode.json
+/opencode.json
