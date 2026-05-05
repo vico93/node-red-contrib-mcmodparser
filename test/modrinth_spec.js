@@ -55,4 +55,46 @@ describe('modrinth Node', function () {
             }
         });
     });
+
+    it('should have ignorefirst property', function (done) {
+        var flow = [{ id: "n1", type: "modrinth", name: "test", slug: "sodium", ignorefirst: true }];
+        helper.load(modrinthNode, flow, function () {
+            var n1 = helper.getNode("n1");
+            try {
+                n1.should.have.property('ignorefirst', true);
+                done();
+            } catch (err) {
+                done(err);
+            }
+        });
+    });
+
+    it('should suppress messages on first poll when ignorefirst is enabled', function (done) {
+        var flow = [
+            { id: "n1", type: "modrinth", name: "test", slug: "sodium", ignorefirst: true, wires: [["n2"]] },
+            { id: "n2", type: "helper" }
+        ];
+        helper.load(modrinthNode, flow, function () {
+            var n2 = helper.getNode("n2");
+            var n1 = helper.getNode("n1");
+            
+            // If ignorefirst is working, n2 should NOT receive any messages 
+            // during the initial 2-second timeout period
+            var messageReceived = false;
+            n2.on("input", function (msg) {
+                messageReceived = true;
+            });
+            
+            // Wait a bit longer than the initial 2-second timeout
+            setTimeout(function() {
+                try {
+                    messageReceived.should.be.false();
+                    n1.should.have.property('donefirst', false);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
+            }, 3000);
+        });
+    });
 });

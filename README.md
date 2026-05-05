@@ -21,7 +21,13 @@ Monitors a Modrinth project for new versions.
 - **Loaders** - Optional: Comma-separated list of mod loaders to filter (e.g., `fabric,quilt`)
 - **Game Versions** - Optional: Comma-separated list of Minecraft versions to filter (e.g., `1.20.1,1.20.2`)
 - **Send as Array** - Return all new versions as a single array instead of individual messages
-- **Ignore First** - Don't send messages on the first poll (useful to avoid flooding on deploy)
+- **Ignore First** - Don't send messages on the first poll (useful to avoid flooding on deploy or restart)
+
+#### About "Ignore First"
+
+When enabled, this option prevents the node from sending any messages during the first poll after the flow is deployed or Node-RED is restarted. This is useful to avoid receiving a flood of all existing versions when you first set up the node. After the first poll, only **new** versions (those not seen before) will be sent.
+
+**Example:** If a project has 50 published versions and you deploy the flow with "Ignore First" checked, you won't receive all 50 versions at once. Instead, you'll only receive versions published after the deployment.
 
 ### Outputs
 
