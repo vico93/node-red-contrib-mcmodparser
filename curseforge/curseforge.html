@@ -1,0 +1,134 @@
+<script type="text/html" data-template-name="curseforge">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-apiKey"><i class="fa fa-key"></i> <span data-i18n="curseforge.label.apiKey"></span></label>
+        <input type="password" id="node-input-apiKey">
+    </div>
+    <div class="form-row">
+        <label for="node-input-slug"><i class="fa fa-cube"></i> <span data-i18n="curseforge.label.modSlug"></span></label>
+        <input type="text" id="node-input-slug" data-i18n="[placeholder]curseforge.placeholder.modSlug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-interval"><i class="fa fa-repeat"></i> <span data-i18n="curseforge.label.refresh"></span></label>
+        <input type="text" id="node-input-interval" style="width:60px"> <span data-i18n="curseforge.label.minutes"></span>
+    </div>
+    <div class="form-row">
+        <label for="node-input-gameVersion"><i class="fa fa-gamepad"></i> <span data-i18n="curseforge.label.gameVersion"></span></label>
+        <input type="text" id="node-input-gameVersion" data-i18n="[placeholder]curseforge.placeholder.gameVersion">
+    </div>
+    <div class="form-row">
+        <label for="node-input-modLoaderType"><i class="fa fa-cogs"></i> <span data-i18n="curseforge.label.modLoaderType"></span></label>
+        <select id="node-input-modLoaderType" style="width: 70%;">
+            <option value="" data-i18n="curseforge.modLoaders.any"></option>
+            <option value="Forge" data-i18n="curseforge.modLoaders.forge"></option>
+            <option value="Cauldron" data-i18n="curseforge.modLoaders.cauldron"></option>
+            <option value="LiteLoader" data-i18n="curseforge.modLoaders.liteloader"></option>
+            <option value="Fabric" data-i18n="curseforge.modLoaders.fabric"></option>
+            <option value="Quilt" data-i18n="curseforge.modLoaders.quilt"></option>
+            <option value="NeoForge" data-i18n="curseforge.modLoaders.neoforge"></option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-releaseType"><i class="fa fa-filter"></i> <span data-i18n="curseforge.label.releaseType"></span></label>
+        <select id="node-input-releaseType" style="width: 70%;">
+            <option value="" data-i18n="curseforge.releaseTypes.all"></option>
+            <option value="Release" data-i18n="curseforge.releaseTypes.release"></option>
+            <option value="Beta" data-i18n="curseforge.releaseTypes.beta"></option>
+            <option value="Alpha" data-i18n="curseforge.releaseTypes.alpha"></option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label> </label>
+        <input type="checkbox" id="node-input-sendarray" style="display:inline-block; width:20px; vertical-align:baseline;">
+        <span data-i18n="curseforge.label.sendarray"></span>
+    </div>
+    <div class="form-row" id="node-input-ignorefirst-row">
+        <label> </label>
+        <input type="checkbox" id="node-input-ignorefirst" style="display:inline-block; width:20px; vertical-align:baseline;">
+        <span data-i18n="curseforge.label.ignorefirst"></span>
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('curseforge',{
+        category: 'advanced-input',
+        color: '#F16436',
+        defaults: {
+            name: { value: "" },
+            slug: { value: "", required: true },
+            interval: { value: 15, required: true, validate: function(v) { return (!isNaN(parseInt(v)) && (parseInt(v) <= 35790)); } },
+            gameVersion: { value: "" },
+            modLoaderType: { value: "" },
+            releaseType: { value: "" },
+            ignorefirst: { value: false },
+            sendarray: { value: false }
+        },
+        credentials: {
+            apiKey: { type: "password" }
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "font-awesome/fa-cube",
+        paletteLabel: function() {
+            return this._("curseforge.curseforge");
+        },
+        label: function() {
+            return this.name || this.slug || this._("curseforge.curseforge");
+        },
+        labelStyle: function() {
+            return this.name ? "node_label_italic" : "";
+        },
+        oneditprepare: function() {
+            $('#node-input-sendarray').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#node-input-ignorefirst-row').hide();
+                } else {
+                    $('#node-input-ignorefirst-row').show();
+                }
+            });
+        }
+    });
+</script>
+
+<script type="text/html" data-help-name="curseforge">
+    <p>Monitors a CurseForge mod for new file releases.</p>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt>API Key <span class="property-type">string</span></dt>
+        <dd>Required CurseForge API key. Obtain one from <a href="https://console.curseforge.com/">console.curseforge.com</a></dd>
+        <dt>Mod Slug <span class="property-type">string</span></dt>
+        <dd>The CurseForge mod slug to monitor (e.g., "jei")</dd>
+        <dt>Refresh Interval <span class="property-type">number</span></dt>
+        <dd>Polling interval in minutes. Default: 15</dd>
+        <dt>Game Version <span class="property-type">string</span></dt>
+        <dd>Optional Minecraft version to filter (e.g., "1.20.1")</dd>
+        <dt>Mod Loader <span class="property-type">string</span></dt>
+        <dd>Optional mod loader to filter (Forge, Fabric, Quilt, NeoForge, etc.)</dd>
+        <dt>Release Type <span class="property-type">string</span></dt>
+        <dd>Optional filter for release type (Release, Beta, Alpha)</dd>
+        <dt>Send as Array</dt>
+        <dd>Return all new files as a single array message</dd>
+        <dt>Ignore First</dt>
+        <dd>Suppress all messages on the first poll after deploy/restart. Prevents flooding with existing files.</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string</span></dt>
+        <dd>Name of the file</dd>
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>File name (or array if "Send as Array" is enabled)</dd>
+        <dt>link <span class="property-type">string</span></dt>
+        <dd>Download URL for the file</dd>
+        <dt>file <span class="property-type">object</span></dt>
+        <dd>Complete file object from the CurseForge API</dd>
+        <dt>project <span class="property-type">string</span></dt>
+        <dd>The mod slug being monitored</dd>
+    </dl>
+
+    <p>The <code>msg.file</code> property contains the complete file object with properties such as <code>.displayName</code>, <code>.fileName</code>, <code>.gameVersions</code>, <code>.downloadUrl</code>, <code>.releaseType</code>, and <code>.fileDate</code>.</p>
+</script>

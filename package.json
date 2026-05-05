@@ -24,7 +24,8 @@
   "node-red": {
     "version": ">=3.0.0",
     "nodes": {
-      "modrinth": "modrinth/modrinth.js"
+      "modrinth": "modrinth/modrinth.js",
+      "curseforge": "curseforge/curseforge.js"
     }
   },
   "engines": {

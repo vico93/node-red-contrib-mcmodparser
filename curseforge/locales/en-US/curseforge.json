@@ -1,0 +1,46 @@
+{
+    "curseforge": {
+        "label": {
+            "modSlug": "Mod Slug",
+            "refresh": "Refresh",
+            "minutes": "minutes",
+            "apiKey": "API Key",
+            "gameVersion": "Game Version",
+            "modLoaderType": "Mod Loader",
+            "releaseType": "Release Type",
+            "sendarray": "Return files as a single array",
+            "ignorefirst": "Ignore first update"
+        },
+        "placeholder": {
+            "modSlug": "e.g., jei",
+            "apiKey": "Enter your CurseForge API key",
+            "gameVersion": "e.g., 1.20.1",
+            "modLoaderType": "Select mod loader"
+        },
+        "errors": {
+            "invalidinterval": "Interval must be less than 35790 minutes",
+            "invalidslug": "Invalid mod slug",
+            "failedfetch": "Failed to fetch from CurseForge API",
+            "badstatuscode": "Bad status code from CurseForge API",
+            "modnotfound": "Mod not found on CurseForge",
+            "noapikey": "API key is required",
+            "invalidapikey": "Invalid API key"
+        },
+        "curseforge": "curseforge",
+        "releaseTypes": {
+            "all": "All",
+            "release": "Release",
+            "beta": "Beta",
+            "alpha": "Alpha"
+        },
+        "modLoaders": {
+            "any": "Any",
+            "forge": "Forge",
+            "cauldron": "Cauldron",
+            "liteloader": "LiteLoader",
+            "fabric": "Fabric",
+            "quilt": "Quilt",
+            "neoforge": "NeoForge"
+        }
+    }
+}
