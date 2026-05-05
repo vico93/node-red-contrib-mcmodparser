@@ -21,19 +21,27 @@ module.exports = function(RED) {
         var node = this;
 
         function buildUrl() {
-            let url = `${API_BASE}/project/${encodeURIComponent(node.slug)}/version?include_changelog=false`;
+            let url = `${API_BASE}/project/${encodeURIComponent(node.slug)}/version`;
+            const params = new URLSearchParams();
+            
             if (node.loaders) {
                 const loaders = node.loaders.split(",").map(s => s.trim()).filter(Boolean);
                 if (loaders.length > 0) {
-                    url += "&loaders=" + encodeURIComponent(JSON.stringify(loaders));
+                    params.append("loaders", JSON.stringify(loaders));
                 }
             }
             if (node.gameVersions) {
                 const versions = node.gameVersions.split(",").map(s => s.trim()).filter(Boolean);
                 if (versions.length > 0) {
-                    url += "&game_versions=" + encodeURIComponent(JSON.stringify(versions));
+                    params.append("game_versions", JSON.stringify(versions));
                 }
             }
+            
+            const queryString = params.toString();
+            if (queryString) {
+                url += "?" + queryString;
+            }
+            
             return url;
         }
 
