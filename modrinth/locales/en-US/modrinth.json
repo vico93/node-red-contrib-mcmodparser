@@ -1,0 +1,26 @@
+{
+    "modrinth": {
+        "label": {
+            "projectSlug": "Project Slug",
+            "refresh": "Refresh",
+            "minutes": "minutes",
+            "loaders": "Loaders",
+            "gameVersions": "Game Versions",
+            "sendarray": "Return versions as a single array",
+            "ignorefirst": "Ignore first update"
+        },
+        "placeholder": {
+            "projectSlug": "e.g., sodium",
+            "loaders": "e.g., fabric, forge",
+            "gameVersions": "e.g., 1.20.1, 1.20.2"
+        },
+        "errors": {
+            "invalidinterval": "Interval must be less than 35790 minutes",
+            "invalidslug": "Invalid project slug",
+            "failedfetch": "Failed to fetch from Modrinth API",
+            "badstatuscode": "Bad status code from Modrinth API",
+            "projectnotfound": "Project not found on Modrinth"
+        },
+        "modrinth": "modrinth"
+    }
+}

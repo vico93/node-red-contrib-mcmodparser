@@ -1,0 +1,105 @@
+<script type="text/html" data-template-name="modrinth">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-slug"><i class="fa fa-cube"></i> <span data-i18n="modrinth.label.projectSlug"></span></label>
+        <input type="text" id="node-input-slug" data-i18n="[placeholder]modrinth.placeholder.projectSlug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-interval"><i class="fa fa-repeat"></i> <span data-i18n="modrinth.label.refresh"></span></label>
+        <input type="text" id="node-input-interval" style="width:60px"> <span data-i18n="modrinth.label.minutes"></span>
+    </div>
+    <div class="form-row">
+        <label for="node-input-loaders"><i class="fa fa-cogs"></i> <span data-i18n="modrinth.label.loaders"></span></label>
+        <input type="text" id="node-input-loaders" data-i18n="[placeholder]modrinth.placeholder.loaders">
+    </div>
+    <div class="form-row">
+        <label for="node-input-gameVersions"><i class="fa fa-gamepad"></i> <span data-i18n="modrinth.label.gameVersions"></span></label>
+        <input type="text" id="node-input-gameVersions" data-i18n="[placeholder]modrinth.placeholder.gameVersions">
+    </div>
+    <div class="form-row">
+        <label> </label>
+        <input type="checkbox" id="node-input-sendarray" style="display:inline-block; width:20px; vertical-align:baseline;">
+        <span data-i18n="modrinth.label.sendarray"></span>
+    </div>
+    <div class="form-row" id="node-input-ignorefirst-row">
+        <label> </label>
+        <input type="checkbox" id="node-input-ignorefirst" style="display:inline-block; width:20px; vertical-align:baseline;">
+        <span data-i18n="modrinth.label.ignorefirst"></span>
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('modrinth',{
+        category: 'advanced-input',
+        color: '#1BD96A',
+        defaults: {
+            name: { value: "" },
+            slug: { value: "", required: true },
+            interval: { value: 15, required: true, validate: function(v) { return (!isNaN(parseInt(v)) && (parseInt(v) <= 35790)); } },
+            loaders: { value: "" },
+            gameVersions: { value: "" },
+            ignorefirst: { value: false },
+            sendarray: { value: false }
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "font-awesome/fa-cube",
+        paletteLabel: function() {
+            return this._("modrinth.modrinth");
+        },
+        label: function() {
+            return this.name || this.slug || this._("modrinth.modrinth");
+        },
+        labelStyle: function() {
+            return this.name ? "node_label_italic" : "";
+        },
+        oneditprepare: function() {
+            $('#node-input-sendarray').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#node-input-ignorefirst-row').hide();
+                } else {
+                    $('#node-input-ignorefirst-row').show();
+                }
+            });
+        }
+    });
+</script>
+
+<script type="text/html" data-help-name="modrinth">
+    <p>Monitors a Modrinth project for new version releases.</p>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt>Project Slug <span class="property-type">string</span></dt>
+        <dd>The Modrinth project slug to monitor (e.g., "sodium")</dd>
+        <dt>Refresh Interval <span class="property-type">number</span></dt>
+        <dd>Polling interval in minutes. Default: 15</dd>
+        <dt>Loaders <span class="property-type">string</span></dt>
+        <dd>Optional comma-separated list of mod loaders to filter (e.g., "fabric, quilt")</dd>
+        <dt>Game Versions <span class="property-type">string</span></dt>
+        <dd>Optional comma-separated list of Minecraft versions to filter (e.g., "1.20.1, 1.20.2")</dd>
+        <dt>Send as Array</dt>
+        <dd>Return all new versions as a single array message</dd>
+        <dt>Ignore First</dt>
+        <dd>Don't send messages on the first poll (useful to avoid flooding on deploy)</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string</span></dt>
+        <dd>Name of the version</dd>
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>Changelog of the version (or array if "Send as Array" is enabled)</dd>
+        <dt>link <span class="property-type">string</span></dt>
+        <dd>URL to the version on Modrinth</dd>
+        <dt>version <span class="property-type">object</span></dt>
+        <dd>Complete version object from the Modrinth API</dd>
+        <dt>project <span class="property-type">string</span></dt>
+        <dd>The project slug being monitored</dd>
+    </dl>
+
+    <p>The <code>msg.version</code> property contains the complete version object with properties such as <code>.version_number</code>, <code>.game_versions</code>, <code>.loaders</code>, <code>.files</code>, and <code>.date_published</code>.</p>
+</script>

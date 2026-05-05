@@ -1,0 +1,39 @@
+{
+  "name": "node-red-contrib-mcmodparser",
+  "version": "1.0.0",
+  "description": "A Node-RED node to monitor mod updates from Modrinth",
+  "main": "modrinth/modrinth.js",
+  "scripts": {
+    "test": "mocha test/**/*_spec.js"
+  },
+  "keywords": [
+    "node-red",
+    "modrinth",
+    "minecraft",
+    "mod",
+    "monitor"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/node-red/node-red-nodes.git",
+    "directory": "tree/master/social/mcmodparser"
+  },
+  "node-red": {
+    "version": ">=3.0.0",
+    "nodes": {
+      "modrinth": "modrinth/modrinth.js"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "mocha": "^10.0.0",
+    "node-red": "^4.1.8",
+    "node-red-node-test-helper": "^0.3.2",
+    "should": "^13.2.3"
+  }
+}
