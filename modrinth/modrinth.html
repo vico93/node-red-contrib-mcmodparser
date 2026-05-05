@@ -20,6 +20,15 @@
         <input type="text" id="node-input-gameVersions" data-i18n="[placeholder]modrinth.placeholder.gameVersions">
     </div>
     <div class="form-row">
+        <label for="node-input-releaseType"><i class="fa fa-filter"></i> <span data-i18n="modrinth.label.releaseType"></span></label>
+        <select id="node-input-releaseType" style="width: 70%;">
+            <option value="" data-i18n="modrinth.releaseTypes.all"></option>
+            <option value="release" data-i18n="modrinth.releaseTypes.release"></option>
+            <option value="beta" data-i18n="modrinth.releaseTypes.beta"></option>
+            <option value="alpha" data-i18n="modrinth.releaseTypes.alpha"></option>
+        </select>
+    </div>
+    <div class="form-row">
         <label> </label>
         <input type="checkbox" id="node-input-sendarray" style="display:inline-block; width:20px; vertical-align:baseline;">
         <span data-i18n="modrinth.label.sendarray"></span>
@@ -41,6 +50,7 @@
             interval: { value: 15, required: true, validate: function(v) { return (!isNaN(parseInt(v)) && (parseInt(v) <= 35790)); } },
             loaders: { value: "" },
             gameVersions: { value: "" },
+            releaseType: { value: "" },
             ignorefirst: { value: false },
             sendarray: { value: false }
         },
@@ -81,6 +91,8 @@
         <dd>Optional comma-separated list of mod loaders to filter (e.g., "fabric, quilt")</dd>
         <dt>Game Versions <span class="property-type">string</span></dt>
         <dd>Optional comma-separated list of Minecraft versions to filter (e.g., "1.20.1, 1.20.2")</dd>
+        <dt>Release Type <span class="property-type">string</span></dt>
+        <dd>Optional filter for release type (Release, Beta, Alpha)</dd>
         <dt>Send as Array</dt>
         <dd>Return all new versions as a single array message</dd>
         <dt>Ignore First</dt>

@@ -6,6 +6,7 @@
             "minutes": "minutes",
             "loaders": "Loaders",
             "gameVersions": "Game Versions",
+            "releaseType": "Release Type",
             "sendarray": "Return versions as a single array",
             "ignorefirst": "Ignore first update"
         },
@@ -13,6 +14,12 @@
             "projectSlug": "e.g., sodium",
             "loaders": "e.g., fabric, forge",
             "gameVersions": "e.g., 1.20.1, 1.20.2"
+        },
+        "releaseTypes": {
+            "all": "All",
+            "release": "Release",
+            "beta": "Beta",
+            "alpha": "Alpha"
         },
         "errors": {
             "invalidinterval": "Interval must be less than 35790 minutes",

@@ -16,6 +16,7 @@ module.exports = function(RED) {
         this.sendarray = n.sendarray || false;
         this.loaders = n.loaders || "";
         this.gameVersions = n.gameVersions || "";
+        this.releaseType = n.releaseType || "";
         this.donefirst = false;
 
         var node = this;
@@ -102,6 +103,11 @@ module.exports = function(RED) {
                 node.error("Unexpected response format: " + node.slug);
                 node.status({ fill: "red", shape: "dot", text: "Unexpected response" });
                 return;
+            }
+
+            // Filter by release type if specified
+            if (node.releaseType) {
+                versions = versions.filter(v => v.version_type === node.releaseType);
             }
 
             const seen = getSeen();

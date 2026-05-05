@@ -97,4 +97,17 @@ describe('modrinth Node', function () {
             }, 3000);
         });
     });
+
+    it('should have releaseType property', function (done) {
+        var flow = [{ id: "n1", type: "modrinth", name: "test", slug: "sodium", releaseType: "release" }];
+        helper.load(modrinthNode, flow, function () {
+            var n1 = helper.getNode("n1");
+            try {
+                n1.should.have.property('releaseType', 'release');
+                done();
+            } catch (err) {
+                done(err);
+            }
+        });
+    });
 });
