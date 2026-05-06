@@ -1,5 +1,7 @@
 # node-red-contrib-mcmodparser
 
+*This project was made with help of Kimi AI (via Opencode). You was warned!*
+
 A [Node-RED](http://nodered.org) node to monitor mod updates from [Modrinth](https://modrinth.com).
 
 ## Install
