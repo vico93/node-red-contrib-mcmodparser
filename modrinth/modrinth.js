@@ -50,6 +50,10 @@ module.exports = function(RED) {
             return `modrinth_${node.id}_seen`;
         }
 
+        function getProjectContextKey() {
+            return `modrinth_${node.id}_projectinfo`;
+        }
+
         function getSeen() {
             return node.context().get(getContextKey()) || {};
         }
@@ -58,12 +62,47 @@ module.exports = function(RED) {
             node.context().set(getContextKey(), seen);
         }
 
+        async function getProjectInfo() {
+            const cacheKey = getProjectContextKey();
+            let projectInfo = node.context().get(cacheKey);
+
+            if (projectInfo && projectInfo.title) {
+                return projectInfo;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/project/${encodeURIComponent(node.slug)}`, {
+                    headers: {
+                        "User-Agent": USER_AGENT
+                    }
+                });
+
+                if (response.status === 200) {
+                    const project = await response.json();
+                    projectInfo = {
+                        title: project.title || node.slug,
+                        slug: node.slug
+                    };
+                    node.context().set(cacheKey, projectInfo);
+                    return projectInfo;
+                }
+            } catch (error) {
+                node.error("Failed to fetch project info: " + node.slug, error);
+            }
+
+            // Fallback: return slug as title
+            return { title: node.slug, slug: node.slug };
+        }
+
         async function getVersions() {
             if (!node.slug || typeof node.slug !== "string" || node.slug.trim() === "") {
                 node.status({ fill: "red", shape: "dot", text: RED._("modrinth.errors.invalidslug") });
                 node.error(RED._("modrinth.errors.invalidslug") + ": " + node.slug);
                 return;
             }
+
+            // Fetch project info (cached)
+            const projectInfo = await getProjectInfo();
 
             let response;
             try {
@@ -133,8 +172,8 @@ module.exports = function(RED) {
                     const msg = {
                         payload: newVersions,
                         versions: newVersions,
-                        project: node.slug,
-                        topic: `${newVersions.length} new version(s) for ${node.slug}`
+                        project: projectInfo,
+                        topic: `${newVersions.length} new version(s) for ${projectInfo.title}`
                     };
                     if (node.ignorefirst === true && node.donefirst === false) {
                         // do nothing
@@ -150,7 +189,7 @@ module.exports = function(RED) {
                         topic: version.name || version.version_number || "Unknown",
                         link: `https://modrinth.com/project/${node.slug}/version/${version.version_number || version.id}`,
                         version: version,
-                        project: node.slug
+                        project: projectInfo
                     };
 
                     if (node.ignorefirst === true && node.donefirst === false) {
